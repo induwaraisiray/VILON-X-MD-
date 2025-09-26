@@ -336,6 +336,7 @@ if (!isReact && config.CUSTOM_REACT === 'true') {
   }});
   
   });
+
     //===================================================   
     conn.decodeJid = jid => {
       if (!jid) return jid;
