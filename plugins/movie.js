@@ -3,7 +3,7 @@ const { cmd } = require('../command');
 const NodeCache = require('node-cache');
 const cache = new NodeCache({ stdTTL: 120 });
 
-const API = "https://nethu-api-ashy.vercel.app";
+const API = "https://apis.sandarux.sbs/docs";
 const WATERMARK = "\n\n*_© VILON-X-MD_*";
 
 cmd({
@@ -17,7 +17,7 @@ cmd({
   if (!q) return reply("🎬 *Please provide a movie name*");
 
   try {
-    const res = await axios.get(`${API}/movie/sinhalasub/search?text=${encodeURIComponent(q)}`);
+    const res = await axios.get(`${API}/api/download/sinhalasub/search?q=${encodeURIComponent(q)}`);
     const list = res?.data?.result?.data || [];
 
     if (!list.length) return reply("❌ No results found!");
@@ -47,13 +47,16 @@ cmd({
         const movie = movies.find(m => m.number === idx);
         if (!movie) return reply("❌ Invalid selection!");
 
-        const detailRes = await axios.get(`${API}/movie/sinhalasub/movie?url=${movie.link}`);
+        const detailRes = await axios.get(`${API}/api/download/sinhalasub-dl?q=${encodeURIComponent(movie.link)}`);
         const data = detailRes.data?.result?.data;
         if (!data) return reply("❌ Movie details not found!");
 
         const title = data.title || movie.title; // fallback if title is missing
 
-        const allLinks = [...data.pixeldrain_dl, ...data.ddl_dl].map((dl, i) => ({
+        const allLinks = [
+          ...(data.pixeldrain_dl || []),
+          ...(data.ddl_dl || [])
+        ].map((dl, i) => ({
           number: i + 1,
           quality: dl.quality,
           size: dl.size,
@@ -65,14 +68,14 @@ cmd({
         let detailText = `*🎬 ${title}*\n
 🗓️ *Year ➛* ${data.date}
 🌍 *Country ➛* ${data.country}
-🎭 *Genres ➛* ${data.category.join(', ')}
+🎭 *Genres ➛* ${data.category?.join(', ')}
 ⭐ *IMDB ➛* ${data.tmdbRate}
 🤵‍♂ *Director ➛* ${data.director}
 ✍ *Subtitle by ➛* ${data.subtitle_author}\n
-🔗 *Join ➛* *https://whatsapp.com/channel/0029Vb5urgj7z4kfTgSlME16*${WATERMARK}`;
+> *© ᴩᴏᴡᴇʀᴅ ʙʏ ᴠɪʟᴏɴ x ᴍᴅ*`;
 
         await conn.sendMessage(from, {
-          image: { url: data.images[0] },
+          image: { url: data.images?.[0] },
           caption: detailText
         }, { quoted: message });
 
