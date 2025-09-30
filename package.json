@@ -14,6 +14,7 @@
     "@sl-code-lords/esana-news": "latest",
     "axios": "^1.7.0",
     "cheerio": "^1.0.0-rc.12",
+    "sequelize": "latset",
     "express": "latest",
     "form-data": "^4.0.0",
     "fs-extra": "^11.2.0",
