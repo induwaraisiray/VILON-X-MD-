@@ -523,9 +523,14 @@ cmd(
           from,
           { image: { url: data.result[i].url }, caption: config.CAPTION },
           { quoted: mek }
-        }
+        );
       }
- );
+    } catch (e) {
+      console.error(e);
+      reply("❌ An error occurred while fetching the image.");
+    }
+  }
+);
     
 cmd(
   {
