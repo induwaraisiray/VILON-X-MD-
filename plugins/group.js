@@ -1,11 +1,20 @@
-const config = require('../config')
-const { cmd, commands } = require('../command')
+const config = require('../config');
+const { cmd, commands } = require('../command');
 const prefix = config.PREFIX;
 const fs = require('fs');
-const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, sleep, fetchJson } = require('../lib/functions2');
-const { writeFileSync } = require('fs');
 const path = require('path');
-const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson} = require('../lib/functions')
+const { 
+    getBuffer, 
+    getGroupAdmins, 
+    getRandom, 
+    h2k, 
+    isUrl, 
+    Json, 
+    runtime, 
+    sleep, 
+    fetchJson,
+    anotherFunction 
+} = require('../lib/functions');
 
 cmd({
     pattern: "unmute",
