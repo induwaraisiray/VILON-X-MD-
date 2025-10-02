@@ -4,7 +4,7 @@
 //  ⚠️ DO NOT MODIFY THIS FILE ⚠️  
 //---------------------------------------------------------------------------
 const { cmd, commands } = require('../command');
-const { config, saveConfig } = require("../config"); // import config system
+const config = require('../config');
 const prefix = config.PREFIX;
 const fs = require('fs');
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, sleep, fetchJson } = require('../lib/functions2');
@@ -35,38 +35,30 @@ cmd({
     pattern: "mode",
     alias: ["setmode"],
     react: "🫟",
-    desc: "Set bot mode to private, public, or group.",
+    desc: "Set bot mode to private or public.",
     category: "settings",
     filename: __filename,
-}, async (conn, mek, m, { args, isCreator, reply }) => {
-    if (!isCreator) return reply("📛 Only the owner can use this command!");
+}, async (conn, mek, m, { from, args, isCreator, reply }) => {
+    if (!isCreator) return reply("*📛 Only the owner can use this command!*");
 
+    // Si aucun argument n'est fourni, afficher le mode actuel et l'usage
     if (!args[0]) {
-        return reply(
-            `📌 Current mode: *${config.MODE}*\n\n` +
-            `✅ Available options:\n- .mode private\n- .mode public\n- .mode group`
-        );
+        return reply(`📌 Current mode: *${config.MODE}*\n\nUsage: .mode private OR .mode public`);
     }
 
     const modeArg = args[0].toLowerCase();
 
-    switch (modeArg) {
-        case "private":
-            saveConfig("MODE", "private");
-            reply("✅ Bot mode is now set to *PRIVATE*.");
-            break;
-        case "public":
-            saveConfig("MODE", "public");
-            reply("✅ Bot mode is now set to *PUBLIC*.");
-            break;
-        case "groups":
-            saveConfig("MODE", "groups");
-            reply("✅ Bot mode is now set to *GROUPs*.");
-            break;
-        default:
-            reply("❌ Invalid mode.\n\nUsage: .mode private | public | group");
+    if (modeArg === "private") {
+        config.MODE = "private";
+        return reply("✅ Bot mode is now set to *PRIVATE*.");
+    } else if (modeArg === "public") {
+        config.MODE = "public";
+        return reply("✅ Bot mode is now set to *PUBLIC*.");
+    } else {
+        return reply("❌ Invalid mode. Please use `.mode private` or `.mode public`.");
     }
 });
+
 
 //--------------------------------------------
 // ALWAYS_ONLINE COMMANDS
@@ -223,3 +215,5 @@ async (conn, mek, m, { from, args, isCreator, reply }) => {
     }
 });
 
+
+    
