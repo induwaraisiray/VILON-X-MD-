@@ -1,29 +1,27 @@
-# Use the LTS version of Node.js (Debian bookworm)
-FROM node:lts-bookworm
+# 1. Base image එක
+FROM node:lts-buster
 
-# Install necessary packages: ffmpeg, imagemagick, libwebp-dev
-RUN apt-get update && \
-    apt-get install -y \
-    ffmpeg \
-    imagemagick \
-    libwebp-dev && \
-    apt-get upgrade -y && \
-    rm -rf /var/lib/apt/lists/*
+# 2. අවශ්‍ය dependencies install කිරීම
+# pm2 එක npm start එකේදී පාවිච්චි කරන නිසා, එය මෙතනම Global install කරන්න
+RUN npm install -g pm2
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app
+# 3. Code එක clone කිරීම (මෙය /QUEEN-SADU-MD-V2 ෆෝල්ඩරය සාදයි)
+RUN git clone https://github.com/induwaraisiray/VILON-X-MD-
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# 4. වැඩ කරන Directory එක නිවැරදි ෆෝල්ඩරයට වෙනස් කිරීම
+WORKDIR /VILON-X-MD-
 
-# Install dependencies including PM2
-RUN npm install && npm install pm2 -g
+# 5. dependencies ස්ථාපනය කිරීම
+# කලින් වගේ && පාවිච්චි නොකර, npm install එක අසාර්ථක වුවත් yarn install එක ක්‍රියාත්මක වීමට || පාවිච්චි කරන්න.
+RUN npm install || yarn install
 
-# Copy all local files to the working directory
+# 6. Local files (ඔබේ .env වගේ files) image එකට copy කිරීම
+# ඔබ QUEEN-SADU-MD-V2 ෆෝල්ඩරය තුළ සිටින නිසා, COPY . . මගින් ඒ folder එක ඇතුළට files copy වේ.
 COPY . .
 
-# Expose port 9090 (to match your Node.js code)
+# 7. Port එක expose කිරීම (9090 Port එක පාවිච්චි කරන්නේ නම්)
 EXPOSE 9090
 
-# Start the application using PM2 in runtime mode
-CMD ["pm2-runtime", "index.js", "--", "--server"]
+# 8. Container එක ආරම්භ කරන Command එක
+# මෙය සාමාන්‍යයෙන් package.json හි ඇති "start" script එක ක්‍රියාත්මක කරයි (එහි pm2 command එක තිබිය යුතුයි).
+CMD ["npm", "start"]"]
