@@ -18,5 +18,6 @@ PUBLIC_MODE: process.env.PUBLIC_MODE || "true",
 READ_CMD: process.env.READ_CMD || "false",
 DEV: process.env.DEV || "923427582273",
 ANTI_VV: process.env.ANTI_VV || "true",
-ANTI_DEL_PATH: process.env.ANTI_DEL_PATH || "log", 
+ANTI_DELETE: process.env.ANTI_DELETE || "false",
+ANTI_DEL_PATH: process.env.ANTI_DEL_PATH || "inbox",     
 };
